@@ -1,0 +1,369 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.itheima.mapper.ProductMapper">
+  <resultMap id="BaseResultMap" type="com.itheima.entity.Product">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="title" jdbcType="VARCHAR" property="title" />
+    <result column="addTime" jdbcType="VARCHAR" property="addtime" />
+    <result column="zhaiyao" jdbcType="VARCHAR" property="zhaiyao" />
+    <result column="click" jdbcType="VARCHAR" property="click" />
+    <result column="imgUrl" jdbcType="VARCHAR" property="imgurl" />
+    <result column="sellPrice" jdbcType="VARCHAR" property="sellprice" />
+    <result column="marketPrice" jdbcType="VARCHAR" property="marketprice" />
+    <result column="pid" jdbcType="INTEGER" property="pid" />
+    <result column="quantityPerUnit" jdbcType="INTEGER" property="quantityperunit" />
+    <result column="number" jdbcType="VARCHAR" property="number" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    id, title, addTime, zhaiyao, click, imgUrl, sellPrice, marketPrice, pid, quantityPerUnit, 
+    number
+  </sql>
+  <select id="selectByExample" parameterType="com.itheima.entity.ProductExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from product
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectProductListAll" resultType="com.itheima.entity.Product">
+    SELECT
+        p.id,
+        p.title,
+        p.addTime,
+        p.zhaiyao,
+        p.click,
+        p.imgUrl,
+        p.sellPrice,
+        p.marketPrice,
+        p.pid,
+        p.quantityPerUnit,
+         p.number,
+        sum( colorsize.colorCount ) as stock
+    FROM
+        product p
+        INNER JOIN colorsize ON p.id = colorsize.pid
+    GROUP BY
+        p.id,
+        p.title,
+        p.addTime,
+        p.zhaiyao,
+        p.click,
+        p.imgUrl,
+        p.sellPrice,
+        p.marketPrice,
+        p.pid,
+        p.number,
+        p.quantityPerUnit
+    limit #{page},#{limit}
+      </select>
+  <select id="selectProductById" resultType="com.itheima.entity.Product">
+    SELECT
+        p.id,
+        p.title,
+        p.addTime,
+        p.zhaiyao,
+        p.click,
+        p.imgUrl,
+        p.sellPrice,
+        p.marketPrice,
+        p.pid,
+        p.quantityPerUnit,
+         p.number,
+        sum( colorsize.colorCount ) as stock
+    FROM
+        product p
+        INNER JOIN colorsize ON p.id = colorsize.pid
+    where  p.id=#{pid}
+    GROUP BY
+        p.id,
+        p.title,
+        p.addTime,
+        p.zhaiyao,
+        p.click,
+        p.imgUrl,
+        p.sellPrice,
+        p.marketPrice,
+        p.pid,
+         p.number,
+        p.quantityPerUnit
+
+      </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from product
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from product
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.itheima.entity.ProductExample">
+    delete from product
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.itheima.entity.Product">
+    insert into product (id, title, addTime, 
+      zhaiyao, click, imgUrl, 
+      sellPrice, marketPrice, pid, 
+      quantityPerUnit, number)
+    values (#{id,jdbcType=INTEGER}, #{title,jdbcType=VARCHAR}, #{addtime,jdbcType=VARCHAR}, 
+      #{zhaiyao,jdbcType=VARCHAR}, #{click,jdbcType=VARCHAR}, #{imgurl,jdbcType=VARCHAR}, 
+      #{sellprice,jdbcType=VARCHAR}, #{marketprice,jdbcType=VARCHAR}, #{pid,jdbcType=INTEGER}, 
+      #{quantityperunit,jdbcType=INTEGER}, #{number,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.itheima.entity.Product">
+    insert into product
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="title != null">
+        title,
+      </if>
+      <if test="addtime != null">
+        addTime,
+      </if>
+      <if test="zhaiyao != null">
+        zhaiyao,
+      </if>
+      <if test="click != null">
+        click,
+      </if>
+      <if test="imgurl != null">
+        imgUrl,
+      </if>
+      <if test="sellprice != null">
+        sellPrice,
+      </if>
+      <if test="marketprice != null">
+        marketPrice,
+      </if>
+      <if test="pid != null">
+        pid,
+      </if>
+      <if test="quantityperunit != null">
+        quantityPerUnit,
+      </if>
+      <if test="number != null">
+        number,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="title != null">
+        #{title,jdbcType=VARCHAR},
+      </if>
+      <if test="addtime != null">
+        #{addtime,jdbcType=VARCHAR},
+      </if>
+      <if test="zhaiyao != null">
+        #{zhaiyao,jdbcType=VARCHAR},
+      </if>
+      <if test="click != null">
+        #{click,jdbcType=VARCHAR},
+      </if>
+      <if test="imgurl != null">
+        #{imgurl,jdbcType=VARCHAR},
+      </if>
+      <if test="sellprice != null">
+        #{sellprice,jdbcType=VARCHAR},
+      </if>
+      <if test="marketprice != null">
+        #{marketprice,jdbcType=VARCHAR},
+      </if>
+      <if test="pid != null">
+        #{pid,jdbcType=INTEGER},
+      </if>
+      <if test="quantityperunit != null">
+        #{quantityperunit,jdbcType=INTEGER},
+      </if>
+      <if test="number != null">
+        #{number,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.itheima.entity.ProductExample" resultType="java.lang.Long">
+    select count(*) from product
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update product
+    <set>
+      <if test="record.id != null">
+        id = #{record.id,jdbcType=INTEGER},
+      </if>
+      <if test="record.title != null">
+        title = #{record.title,jdbcType=VARCHAR},
+      </if>
+      <if test="record.addtime != null">
+        addTime = #{record.addtime,jdbcType=VARCHAR},
+      </if>
+      <if test="record.zhaiyao != null">
+        zhaiyao = #{record.zhaiyao,jdbcType=VARCHAR},
+      </if>
+      <if test="record.click != null">
+        click = #{record.click,jdbcType=VARCHAR},
+      </if>
+      <if test="record.imgurl != null">
+        imgUrl = #{record.imgurl,jdbcType=VARCHAR},
+      </if>
+      <if test="record.sellprice != null">
+        sellPrice = #{record.sellprice,jdbcType=VARCHAR},
+      </if>
+      <if test="record.marketprice != null">
+        marketPrice = #{record.marketprice,jdbcType=VARCHAR},
+      </if>
+      <if test="record.pid != null">
+        pid = #{record.pid,jdbcType=INTEGER},
+      </if>
+      <if test="record.quantityperunit != null">
+        quantityPerUnit = #{record.quantityperunit,jdbcType=INTEGER},
+      </if>
+      <if test="record.number != null">
+        number = #{record.number,jdbcType=VARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update product
+    set id = #{record.id,jdbcType=INTEGER},
+      title = #{record.title,jdbcType=VARCHAR},
+      addTime = #{record.addtime,jdbcType=VARCHAR},
+      zhaiyao = #{record.zhaiyao,jdbcType=VARCHAR},
+      click = #{record.click,jdbcType=VARCHAR},
+      imgUrl = #{record.imgurl,jdbcType=VARCHAR},
+      sellPrice = #{record.sellprice,jdbcType=VARCHAR},
+      marketPrice = #{record.marketprice,jdbcType=VARCHAR},
+      pid = #{record.pid,jdbcType=INTEGER},
+      quantityPerUnit = #{record.quantityperunit,jdbcType=INTEGER},
+      number = #{record.number,jdbcType=VARCHAR}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.itheima.entity.Product">
+    update product
+    <set>
+      <if test="title != null">
+        title = #{title,jdbcType=VARCHAR},
+      </if>
+      <if test="addtime != null">
+        addTime = #{addtime,jdbcType=VARCHAR},
+      </if>
+      <if test="zhaiyao != null">
+        zhaiyao = #{zhaiyao,jdbcType=VARCHAR},
+      </if>
+      <if test="click != null">
+        click = #{click,jdbcType=VARCHAR},
+      </if>
+      <if test="imgurl != null">
+        imgUrl = #{imgurl,jdbcType=VARCHAR},
+      </if>
+      <if test="sellprice != null">
+        sellPrice = #{sellprice,jdbcType=VARCHAR},
+      </if>
+      <if test="marketprice != null">
+        marketPrice = #{marketprice,jdbcType=VARCHAR},
+      </if>
+      <if test="pid != null">
+        pid = #{pid,jdbcType=INTEGER},
+      </if>
+      <if test="quantityperunit != null">
+        quantityPerUnit = #{quantityperunit,jdbcType=INTEGER},
+      </if>
+      <if test="number != null">
+        number = #{number,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.itheima.entity.Product">
+    update product
+    set title = #{title,jdbcType=VARCHAR},
+      addTime = #{addtime,jdbcType=VARCHAR},
+      zhaiyao = #{zhaiyao,jdbcType=VARCHAR},
+      click = #{click,jdbcType=VARCHAR},
+      imgUrl = #{imgurl,jdbcType=VARCHAR},
+      sellPrice = #{sellprice,jdbcType=VARCHAR},
+      marketPrice = #{marketprice,jdbcType=VARCHAR},
+      pid = #{pid,jdbcType=INTEGER},
+      quantityPerUnit = #{quantityperunit,jdbcType=INTEGER},
+      number = #{number,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

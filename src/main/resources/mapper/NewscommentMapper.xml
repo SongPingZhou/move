@@ -1,0 +1,217 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.itheima.mapper.NewscommentMapper">
+  <resultMap id="BaseResultMap" type="com.itheima.entity.Newscomment">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="newId" jdbcType="INTEGER" property="newid" />
+    <result column="commentBody" jdbcType="VARCHAR" property="commentbody" />
+    <result column="commentTime" jdbcType="VARCHAR" property="commenttime" />
+    <result column="commentUser" jdbcType="INTEGER" property="commentuser" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    id, newId, commentBody, commentTime, commentUser
+  </sql>
+  <select id="selectByExample" parameterType="com.itheima.entity.NewscommentExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from newscomment
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from newscomment
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <select id="selectNewsCommentByLimit" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from newscomment
+    where newId = #{newsid}  order by id desc limit #{page},#{limit}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from newscomment
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.itheima.entity.NewscommentExample">
+    delete from newscomment
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.itheima.entity.Newscomment">
+    insert into newscomment (id, newId, commentBody, 
+      commentTime, commentUser)
+    values (#{id,jdbcType=INTEGER}, #{newid,jdbcType=INTEGER}, #{commentbody,jdbcType=VARCHAR}, 
+      #{commenttime,jdbcType=VARCHAR}, #{commentuser,jdbcType=INTEGER})
+  </insert>
+  <insert id="insertSelective" parameterType="com.itheima.entity.Newscomment">
+    insert into newscomment
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="newid != null">
+        newId,
+      </if>
+      <if test="commentbody != null">
+        commentBody,
+      </if>
+      <if test="commenttime != null">
+        commentTime,
+      </if>
+      <if test="commentuser != null">
+        commentUser,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="newid != null">
+        #{newid,jdbcType=INTEGER},
+      </if>
+      <if test="commentbody != null">
+        #{commentbody,jdbcType=VARCHAR},
+      </if>
+      <if test="commenttime != null">
+        #{commenttime,jdbcType=VARCHAR},
+      </if>
+      <if test="commentuser != null">
+        #{commentuser,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.itheima.entity.NewscommentExample" resultType="java.lang.Long">
+    select count(*) from newscomment
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update newscomment
+    <set>
+      <if test="record.id != null">
+        id = #{record.id,jdbcType=INTEGER},
+      </if>
+      <if test="record.newid != null">
+        newId = #{record.newid,jdbcType=INTEGER},
+      </if>
+      <if test="record.commentbody != null">
+        commentBody = #{record.commentbody,jdbcType=VARCHAR},
+      </if>
+      <if test="record.commenttime != null">
+        commentTime = #{record.commenttime,jdbcType=VARCHAR},
+      </if>
+      <if test="record.commentuser != null">
+        commentUser = #{record.commentuser,jdbcType=INTEGER},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update newscomment
+    set id = #{record.id,jdbcType=INTEGER},
+      newId = #{record.newid,jdbcType=INTEGER},
+      commentBody = #{record.commentbody,jdbcType=VARCHAR},
+      commentTime = #{record.commenttime,jdbcType=VARCHAR},
+      commentUser = #{record.commentuser,jdbcType=INTEGER}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.itheima.entity.Newscomment">
+    update newscomment
+    <set>
+      <if test="newid != null">
+        newId = #{newid,jdbcType=INTEGER},
+      </if>
+      <if test="commentbody != null">
+        commentBody = #{commentbody,jdbcType=VARCHAR},
+      </if>
+      <if test="commenttime != null">
+        commentTime = #{commenttime,jdbcType=VARCHAR},
+      </if>
+      <if test="commentuser != null">
+        commentUser = #{commentuser,jdbcType=INTEGER},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.itheima.entity.Newscomment">
+    update newscomment
+    set newId = #{newid,jdbcType=INTEGER},
+      commentBody = #{commentbody,jdbcType=VARCHAR},
+      commentTime = #{commenttime,jdbcType=VARCHAR},
+      commentUser = #{commentuser,jdbcType=INTEGER}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

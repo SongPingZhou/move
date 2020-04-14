@@ -1,0 +1,353 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.itheima.mapper.OrdersMapper">
+  <resultMap id="BaseResultMap" type="com.itheima.entity.Orders">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="orderDate" jdbcType="TIMESTAMP" property="orderdate" />
+    <result column="customerId" jdbcType="INTEGER" property="customerid" />
+    <result column="totalMoney" jdbcType="REAL" property="totalmoney" />
+    <result column="status" jdbcType="VARCHAR" property="status" />
+    <result column="shipName" jdbcType="VARCHAR" property="shipname" />
+    <result column="shipNum" jdbcType="VARCHAR" property="shipnum" />
+    <result column="shipDate" jdbcType="TIMESTAMP" property="shipdate" />
+    <result column="shipCountry" jdbcType="VARCHAR" property="shipcountry" />
+    <result column="shipProvince" jdbcType="VARCHAR" property="shipprovince" />
+    <result column="shipCity" jdbcType="VARCHAR" property="shipcity" />
+    <result column="shipTown" jdbcType="VARCHAR" property="shiptown" />
+    <result column="shipAddress" jdbcType="VARCHAR" property="shipaddress" />
+    <result column="shipPostCode" jdbcType="VARCHAR" property="shippostcode" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    id, orderDate, customerId, totalMoney, status, shipName, shipNum, shipDate, shipCountry, 
+    shipProvince, shipCity, shipTown, shipAddress, shipPostCode
+  </sql>
+  <select id="selectByExample" parameterType="com.itheima.entity.OrdersExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from orders
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from orders
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from orders
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.itheima.entity.OrdersExample">
+    delete from orders
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.itheima.entity.Orders">
+    insert into orders (id, orderDate, customerId, 
+      totalMoney, status, shipName, 
+      shipNum, shipDate, shipCountry, 
+      shipProvince, shipCity, shipTown, 
+      shipAddress, shipPostCode)
+    values (#{id,jdbcType=INTEGER}, #{orderdate,jdbcType=TIMESTAMP}, #{customerid,jdbcType=INTEGER}, 
+      #{totalmoney,jdbcType=REAL}, #{status,jdbcType=VARCHAR}, #{shipname,jdbcType=VARCHAR}, 
+      #{shipnum,jdbcType=VARCHAR}, #{shipdate,jdbcType=TIMESTAMP}, #{shipcountry,jdbcType=VARCHAR}, 
+      #{shipprovince,jdbcType=VARCHAR}, #{shipcity,jdbcType=VARCHAR}, #{shiptown,jdbcType=VARCHAR}, 
+      #{shipaddress,jdbcType=VARCHAR}, #{shippostcode,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.itheima.entity.Orders">
+    insert into orders
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="orderdate != null">
+        orderDate,
+      </if>
+      <if test="customerid != null">
+        customerId,
+      </if>
+      <if test="totalmoney != null">
+        totalMoney,
+      </if>
+      <if test="status != null">
+        status,
+      </if>
+      <if test="shipname != null">
+        shipName,
+      </if>
+      <if test="shipnum != null">
+        shipNum,
+      </if>
+      <if test="shipdate != null">
+        shipDate,
+      </if>
+      <if test="shipcountry != null">
+        shipCountry,
+      </if>
+      <if test="shipprovince != null">
+        shipProvince,
+      </if>
+      <if test="shipcity != null">
+        shipCity,
+      </if>
+      <if test="shiptown != null">
+        shipTown,
+      </if>
+      <if test="shipaddress != null">
+        shipAddress,
+      </if>
+      <if test="shippostcode != null">
+        shipPostCode,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="orderdate != null">
+        #{orderdate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="customerid != null">
+        #{customerid,jdbcType=INTEGER},
+      </if>
+      <if test="totalmoney != null">
+        #{totalmoney,jdbcType=REAL},
+      </if>
+      <if test="status != null">
+        #{status,jdbcType=VARCHAR},
+      </if>
+      <if test="shipname != null">
+        #{shipname,jdbcType=VARCHAR},
+      </if>
+      <if test="shipnum != null">
+        #{shipnum,jdbcType=VARCHAR},
+      </if>
+      <if test="shipdate != null">
+        #{shipdate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="shipcountry != null">
+        #{shipcountry,jdbcType=VARCHAR},
+      </if>
+      <if test="shipprovince != null">
+        #{shipprovince,jdbcType=VARCHAR},
+      </if>
+      <if test="shipcity != null">
+        #{shipcity,jdbcType=VARCHAR},
+      </if>
+      <if test="shiptown != null">
+        #{shiptown,jdbcType=VARCHAR},
+      </if>
+      <if test="shipaddress != null">
+        #{shipaddress,jdbcType=VARCHAR},
+      </if>
+      <if test="shippostcode != null">
+        #{shippostcode,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.itheima.entity.OrdersExample" resultType="java.lang.Long">
+    select count(*) from orders
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update orders
+    <set>
+      <if test="record.id != null">
+        id = #{record.id,jdbcType=INTEGER},
+      </if>
+      <if test="record.orderdate != null">
+        orderDate = #{record.orderdate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.customerid != null">
+        customerId = #{record.customerid,jdbcType=INTEGER},
+      </if>
+      <if test="record.totalmoney != null">
+        totalMoney = #{record.totalmoney,jdbcType=REAL},
+      </if>
+      <if test="record.status != null">
+        status = #{record.status,jdbcType=VARCHAR},
+      </if>
+      <if test="record.shipname != null">
+        shipName = #{record.shipname,jdbcType=VARCHAR},
+      </if>
+      <if test="record.shipnum != null">
+        shipNum = #{record.shipnum,jdbcType=VARCHAR},
+      </if>
+      <if test="record.shipdate != null">
+        shipDate = #{record.shipdate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.shipcountry != null">
+        shipCountry = #{record.shipcountry,jdbcType=VARCHAR},
+      </if>
+      <if test="record.shipprovince != null">
+        shipProvince = #{record.shipprovince,jdbcType=VARCHAR},
+      </if>
+      <if test="record.shipcity != null">
+        shipCity = #{record.shipcity,jdbcType=VARCHAR},
+      </if>
+      <if test="record.shiptown != null">
+        shipTown = #{record.shiptown,jdbcType=VARCHAR},
+      </if>
+      <if test="record.shipaddress != null">
+        shipAddress = #{record.shipaddress,jdbcType=VARCHAR},
+      </if>
+      <if test="record.shippostcode != null">
+        shipPostCode = #{record.shippostcode,jdbcType=VARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update orders
+    set id = #{record.id,jdbcType=INTEGER},
+      orderDate = #{record.orderdate,jdbcType=TIMESTAMP},
+      customerId = #{record.customerid,jdbcType=INTEGER},
+      totalMoney = #{record.totalmoney,jdbcType=REAL},
+      status = #{record.status,jdbcType=VARCHAR},
+      shipName = #{record.shipname,jdbcType=VARCHAR},
+      shipNum = #{record.shipnum,jdbcType=VARCHAR},
+      shipDate = #{record.shipdate,jdbcType=TIMESTAMP},
+      shipCountry = #{record.shipcountry,jdbcType=VARCHAR},
+      shipProvince = #{record.shipprovince,jdbcType=VARCHAR},
+      shipCity = #{record.shipcity,jdbcType=VARCHAR},
+      shipTown = #{record.shiptown,jdbcType=VARCHAR},
+      shipAddress = #{record.shipaddress,jdbcType=VARCHAR},
+      shipPostCode = #{record.shippostcode,jdbcType=VARCHAR}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.itheima.entity.Orders">
+    update orders
+    <set>
+      <if test="orderdate != null">
+        orderDate = #{orderdate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="customerid != null">
+        customerId = #{customerid,jdbcType=INTEGER},
+      </if>
+      <if test="totalmoney != null">
+        totalMoney = #{totalmoney,jdbcType=REAL},
+      </if>
+      <if test="status != null">
+        status = #{status,jdbcType=VARCHAR},
+      </if>
+      <if test="shipname != null">
+        shipName = #{shipname,jdbcType=VARCHAR},
+      </if>
+      <if test="shipnum != null">
+        shipNum = #{shipnum,jdbcType=VARCHAR},
+      </if>
+      <if test="shipdate != null">
+        shipDate = #{shipdate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="shipcountry != null">
+        shipCountry = #{shipcountry,jdbcType=VARCHAR},
+      </if>
+      <if test="shipprovince != null">
+        shipProvince = #{shipprovince,jdbcType=VARCHAR},
+      </if>
+      <if test="shipcity != null">
+        shipCity = #{shipcity,jdbcType=VARCHAR},
+      </if>
+      <if test="shiptown != null">
+        shipTown = #{shiptown,jdbcType=VARCHAR},
+      </if>
+      <if test="shipaddress != null">
+        shipAddress = #{shipaddress,jdbcType=VARCHAR},
+      </if>
+      <if test="shippostcode != null">
+        shipPostCode = #{shippostcode,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.itheima.entity.Orders">
+    update orders
+    set orderDate = #{orderdate,jdbcType=TIMESTAMP},
+      customerId = #{customerid,jdbcType=INTEGER},
+      totalMoney = #{totalmoney,jdbcType=REAL},
+      status = #{status,jdbcType=VARCHAR},
+      shipName = #{shipname,jdbcType=VARCHAR},
+      shipNum = #{shipnum,jdbcType=VARCHAR},
+      shipDate = #{shipdate,jdbcType=TIMESTAMP},
+      shipCountry = #{shipcountry,jdbcType=VARCHAR},
+      shipProvince = #{shipprovince,jdbcType=VARCHAR},
+      shipCity = #{shipcity,jdbcType=VARCHAR},
+      shipTown = #{shiptown,jdbcType=VARCHAR},
+      shipAddress = #{shipaddress,jdbcType=VARCHAR},
+      shipPostCode = #{shippostcode,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>
